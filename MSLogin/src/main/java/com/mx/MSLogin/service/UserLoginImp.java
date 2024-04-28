@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.mx.MSLogin.dao.UserLoginDao;
 import com.mx.MSLogin.domain.UserLogin;
+import com.mx.MSLogin.exceptions.UserLoginException;
+import com.mx.MSLogin.exceptions.UserLoginExceptionNotFound;
 
 @Service
 public class UserLoginImp implements UserLoginService {
@@ -16,7 +18,15 @@ public class UserLoginImp implements UserLoginService {
 	
 	@Override
 	public UserLogin findUser(UserLogin user) {
-		return userLoginDao.findByNombre(user.getNombre());
+		UserLogin userToFind = userLoginDao.findByNombre(user.getNombre());
+
+		if (userToFind == null ) {
+			throw new UserLoginExceptionNotFound("Usuario no encontrado"); 
+		} else if (!userToFind.getContraseña().equals(user.getContraseña())) {
+			throw new UserLoginException("Contraseña incorrecta");
+		} 
+
+		return userToFind;
 	}
 
 	@Override

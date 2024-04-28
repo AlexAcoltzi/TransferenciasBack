@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mx.MSLogin.domain.UserLogin;
+import com.mx.MSLogin.exceptions.UserLoginException;
+import com.mx.MSLogin.exceptions.UserLoginExceptionNotFound;
 import com.mx.MSLogin.service.UserLoginImp;
 
 @RequestMapping("/loginRedSinergia")
@@ -23,7 +25,15 @@ public class UserLoginController {
 
 	@PostMapping("/login-user")
 	ResponseEntity<?> getLogin(@RequestBody UserLogin user) {
-		return new ResponseEntity<>(userImp.findUser(user), HttpStatus.OK);
+		try {
+			return new ResponseEntity<>(userImp.findUser(user), HttpStatus.OK);
+		} catch (UserLoginExceptionNotFound e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (UserLoginException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@GetMapping("/getAll")
