@@ -20,10 +20,19 @@ public class TransferAccountController {
 	@Autowired
 	TransferAccountImp accountImp;
 	
+	// Endpoint para obtener todas las transferencias de un usuario
 	@PostMapping("/getTransfers")
 	ResponseEntity<?> getTransfers(@RequestBody TransferAccount transferAccount) {
-		return new ResponseEntity<>(accountImp.getTransferAccounts(transferAccount.getIdCuentaOrigen()), HttpStatus.OK);
+		// Llama al servicio para obtener todas las transferencias de un usuario y devuelve una respuesta HTTP OK con los datos
+		return new ResponseEntity<>(accountImp.getAllTransferAccounts(transferAccount.getIdUsuario()), HttpStatus.OK);
 	}
 	
+	// Endpoint para guardar una nueva transferencia
+	@PostMapping("/setTransfers")
+	ResponseEntity<?> setTransfers(@RequestBody TransferAccount transferAccount) {
+		// Llama al servicio para guardar la transferencia y devuelve una respuesta HTTP con estado de creación exitosa
+		accountImp.saveTransferAccount(transferAccount);
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
 
 }

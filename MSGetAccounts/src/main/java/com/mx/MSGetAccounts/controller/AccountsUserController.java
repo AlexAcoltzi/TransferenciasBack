@@ -20,8 +20,10 @@ public class AccountsUserController {
 	@Autowired
 	AccountsUserImp accountsUserImp;
 	
+	// Endpoint para obtener las cuentas de un usuario
 	@PostMapping("/getAccounts")
 	ResponseEntity<?> getAccounts(@RequestBody AccountsUser accountsUser){
+		// Llama al servicio para obtener las cuentas del usuario y devuelve una respuesta HTTP OK con los datos
 		return new ResponseEntity<>(accountsUserImp.getUserAccounts(accountsUser.getIdUsuario()), HttpStatus.OK);
 		
 	}
